@@ -1,0 +1,27 @@
+---
+- hosts: nginx_servers
+  become: yes
+  tasks:
+    - name: Ensure NGINX is installed
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable NGINX service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy custom NGINX configuration
+      copy:
+        src: /path/to/local/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart NGINX to apply configuration changes
+      service:
+        name: nginx
+        state: restarted
